@@ -12,7 +12,10 @@ app.use(express.json());
 
 // Importar rutas
 import sensoresRoutes from "./routes/sensores.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+
 app.use("/api/sensores", sensoresRoutes);
+app.use("/api/auth", authRoutes);
 
 // Conexión a MongoDB
 mongoose

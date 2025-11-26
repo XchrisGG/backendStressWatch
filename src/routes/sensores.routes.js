@@ -1,4 +1,3 @@
-// src/routes/sensores.routes.js
 import { Router } from "express";
 import {
   crearDatos,
@@ -8,8 +7,8 @@ import {
 
 const router = Router();
 
-router.post("/", crearDatos);  
-router.put("/:id", actualizarDatos); 
+router.post("/", crearDatos);
+router.put("/:id", actualizarDatos);
 router.get("/ultimo", obtenerUltimo);
 
 export default router;

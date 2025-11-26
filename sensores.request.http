@@ -1,16 +1,17 @@
 ### Crear un registro de sensores
-POST http://localhost:3000/api/sensores
+POST https://backendstresswatch.onrender.com/api/sensores
 Content-Type: application/json
 
 {
-  
-  "pulso": 72,
-  "temperatura": 36.2,
-  "estres": 25,
-  "calidad_sueno": 85
+
+  "heartRate": 7232232,
+  "light": 363.2,
+  "gyro": 253,
+  "timestamp:": 8523,
+  "userId": "2342352"
 }
 
-###
+
 ### Obtener el último registro
 GET http://localhost:3000/api/sensores/ultimo
 

@@ -8,7 +8,7 @@ export const registrar = async (req, res) => {
     const { correo, password } = req.body;
 
     // evitar que se registren usuarios duplicados
-    const existe = await Correo.findOne({ correo });
+    const existe = await Usuario.findOne({ correo });
     if (existe) {
       return res.status(400).json({ ok: false, msg: "El usuario ya existe" });
     }
@@ -17,14 +17,14 @@ export const registrar = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(password, salt);
 
-    const nuevoUsuario = new Correo({
+    const nuevoUsuario = new Usuario({
       ...req.body,
       password: passwordHash,
     });
 
     await nuevoUsuario.save();
 
-    return res.status(201).json({ ok: true, correo: nuevoUsuario });
+    return res.status(201).json({ ok: true, usuario: nuevoUsuario });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
@@ -32,20 +32,18 @@ export const registrar = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { usuario, password } = req.body;
+    const { correo, password } = req.body;
 
-    const user = await Usuario.findOne({ usuario });
+    const user = await Usuario.findOne({ correo });
     if (!user) {
       return res.status(400).json({ ok: false, msg: "Usuario no encontrado" });
     }
 
-    // validar contraseña
     const valida = bcrypt.compareSync(password, user.password);
     if (!valida) {
       return res.status(400).json({ ok: false, msg: "Contraseña incorrecta" });
     }
 
-    // generar token
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET,
@@ -59,24 +57,9 @@ export const login = async (req, res) => {
         id: user._id,
         nombre: user.nombre,
         apellido: user.apellido,
-        usuario: user.usuario,
+        correo: user.correo,
       }
     });
-
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-};
-
-export const obtenerPerfil = async (req, res) => {
-  try {
-    const user = await Usuario.findById(req.userId).select("-password");
-
-    if (!user) {
-      return res.status(404).json({ ok: false, msg: "Usuario no encontrado" });
-    }
-
-    res.json({ ok: true, usuario: user });
 
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });

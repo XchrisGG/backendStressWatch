@@ -65,3 +65,19 @@ export const login = async (req, res) => {
     res.status(500).json({ ok: false, error: error.message });
   }
 };
+
+
+export const obtenerPerfil = async (req, res) => {
+  try {
+    const user = await Usuario.findById(req.userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ ok: false, msg: "Usuario no encontrado" });
+    }
+
+    res.json({ ok: true, usuario: user });
+
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+};

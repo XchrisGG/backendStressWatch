@@ -8,7 +8,7 @@ export const registrar = async (req, res) => {
     const { correo, password } = req.body;
 
     // evitar que se registren usuarios duplicados
-    const existe = await Usuario.findOne({ usuario });
+    const existe = await Correo.findOne({ correo });
     if (existe) {
       return res.status(400).json({ ok: false, msg: "El usuario ya existe" });
     }
@@ -17,14 +17,14 @@ export const registrar = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(password, salt);
 
-    const nuevoUsuario = new Usuario({
+    const nuevoUsuario = new Correo({
       ...req.body,
       password: passwordHash,
     });
 
     await nuevoUsuario.save();
 
-    return res.status(201).json({ ok: true, usuario: nuevoUsuario });
+    return res.status(201).json({ ok: true, correo: nuevoUsuario });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }

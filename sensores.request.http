@@ -4,11 +4,11 @@ Content-Type: application/json
 
 {
 
-  "heartRate": 7232232,
+  "heartRate": 7232223423432,
   "light": 363.2,
   "gyro": 253,
-  "timestamp:": 8523,
-  "userId": "2342352"
+  "timestamp": 1,
+  "userId": "234232342352"
 }
 
 
@@ -22,4 +22,28 @@ Content-Type: application/json
 
 {
   "pulso": 90
+}
+
+###
+POST https://backendstresswatch.onrender.com/api/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Chris",
+  "apellido": "Hernández",
+  "sexo": "masculino",
+  "fechaNacimiento": "2000-05-12",
+  "imagenPerfil": "https://cdn.miapp.com/perfiles/chris.png",
+  "pais": "México",
+  "usuario": "chris123",
+  "password": "123456"
+}
+
+###
+POST https://backendstresswatch.onrender.com/api/auth/login
+Content-Type: application/json
+
+{
+  "usuario": "chris123",
+  "password": "123456"
 }

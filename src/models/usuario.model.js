@@ -13,6 +13,12 @@ const UsuarioSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    edad : {
+      type: String,
+      required: true,
+      trim: true,
+
+    },
     sexo: {
       type: String,
       enum: ["masculino", "femenino", "otro"],
@@ -22,15 +28,12 @@ const UsuarioSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    imagenPerfil: {
-      type: String, // será una URL
-      default: "",
-    },
+
     pais: {
       type: String,
       required: true,
     },
-    usuario: {
+    correo: {
       type: String,
       required: true,
       unique: true,
@@ -40,7 +43,11 @@ const UsuarioSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
-    }
+    },
+    avatarIndex: {
+      type: Int, // será una URL
+      required: true
+    },
   },
   { timestamps: true }
 );

@@ -45,7 +45,7 @@ const UsuarioSchema = new mongoose.Schema(
       minlength: 6,
     },
     avatarIndex: {
-      type: Int, // será una URL
+      type: Number, 
       required: true
     },
   },

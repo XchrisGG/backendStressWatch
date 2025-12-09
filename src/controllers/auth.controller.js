@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 export const registrar = async (req, res) => {
   try {
-    const { usuario, password } = req.body;
+    const { correo, password } = req.body;
 
     // evitar que se registren usuarios duplicados
     const existe = await Usuario.findOne({ usuario });

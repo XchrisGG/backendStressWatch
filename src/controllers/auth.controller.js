@@ -5,10 +5,10 @@ import jwt from "jsonwebtoken";
 
 export const registrar = async (req, res) => {
   try {
-    const { correo, password } = req.body;
+    const { usuario, password } = req.body;
 
     // evitar que se registren usuarios duplicados
-    const existe = await Usuario.findOne({ correo });
+    const existe = await Usuario.findOne({ usuario });
     if (existe) {
       return res.status(400).json({ ok: false, msg: "El usuario ya existe" });
     }
@@ -32,18 +32,20 @@ export const registrar = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { correo, password } = req.body;
+    const { usuario, password } = req.body;
 
-    const user = await Usuario.findOne({ correo });
+    const user = await Usuario.findOne({ usuario });
     if (!user) {
       return res.status(400).json({ ok: false, msg: "Usuario no encontrado" });
     }
 
+    // validar contraseña
     const valida = bcrypt.compareSync(password, user.password);
     if (!valida) {
       return res.status(400).json({ ok: false, msg: "Contraseña incorrecta" });
     }
 
+    // generar token
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET,
@@ -57,7 +59,7 @@ export const login = async (req, res) => {
         id: user._id,
         nombre: user.nombre,
         apellido: user.apellido,
-        correo: user.correo,
+        usuario: user.usuario,
       }
     });
 
@@ -65,7 +67,6 @@ export const login = async (req, res) => {
     res.status(500).json({ ok: false, error: error.message });
   }
 };
-
 
 export const obtenerPerfil = async (req, res) => {
   try {

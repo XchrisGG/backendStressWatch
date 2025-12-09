@@ -33,7 +33,7 @@ const UsuarioSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    correo: {
+    user: {
       type: String,
       required: true,
       unique: true,

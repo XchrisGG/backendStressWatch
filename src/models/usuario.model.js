@@ -21,7 +21,7 @@ const UsuarioSchema = new mongoose.Schema(
     },
     sexo: {
       type: String,
-      enum: ["masculino", "femenino", "otro"],
+      enum: ["Masculino", "Femenino", "otro"],
       required: true,
     },
     fechaNacimiento: {

@@ -3,6 +3,7 @@ import { Router } from "express";
 import { registrar, login, obtenerPerfil } from "../controllers/auth.controller.js";
 import { verificarToken } from "../middleware/auth.js";
 
+
 const router = Router();
 
 router.post("/register", registrar);

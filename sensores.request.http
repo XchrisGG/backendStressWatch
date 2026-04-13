@@ -29,14 +29,15 @@ POST https://backendstresswatch.onrender.com/api/auth/register
 Content-Type: application/json
 
 {
-  "nombre": "Chris",
-  "apellido": "Hernández",
-  "sexo": "masculino",
-  "fechaNacimiento": "2000-05-12",
-  "imagenPerfil": "https://cdn.miapp.com/perfiles/chris.png",
+  "nombre": "Chrisdsadasdsasdsaddafs",
+  "apellido": "Hesssrnasdsadández",
+  "edad": "25",
+  "sexo": "Masculino",
+  "fechaNacimiento": "2000-03-12",
   "pais": "México",
-  "usuario": "chris123",
-  "password": "123456"
+  "usuario": "alee@gmail.com",
+  "password": "123",
+  "avatarIndex": "1"
 }
 
 ###
@@ -44,6 +45,6 @@ POST https://backendstresswatch.onrender.com/api/auth/login
 Content-Type: application/json
 
 {
-  "usuario": "chris123",
-  "password": "123456"
+  "usuario": "alee@gmail.com",
+  "password": "123"
 }

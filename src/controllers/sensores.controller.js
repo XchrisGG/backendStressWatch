@@ -1,16 +1,32 @@
 // src/controllers/sensores.controller.js
 import Sensores from "../models/sensores.model.js";
+import axios from "axios";
 
 export const crearDatos = async (req, res) => {
   try {
     const { heartRate, light, gyro, timestamp, userId } = req.body;
 
+    // 1. LLAMADA AL MICROSERVICIO DE PYTHON
+    let interpretacion = null;
+    try {
+      const pythonResponse = await axios.post('https://apidatos-ivwy.onrender.com', {
+        heartRate,
+        light,
+        gyro
+      });
+      interpretacion = pythonResponse.data;
+    } catch (errorPython) {
+      console.error("Python no responde, guardando solo datos crudos.");
+    }
+
+    // 2. CREAR EL DOCUMENTO CON EL ANÁLISIS INCLUIDO
     const nuevoDato = new Sensores({
       heartRate,
       light,
       gyro,
       timestamp,
       userId: userId || null,
+      analisis: interpretacion // 👈 Aquí se guarda lo que calculó Python
     });
 
     await nuevoDato.save();

@@ -5,18 +5,39 @@ import axios from "axios";
 export const crearDatos = async (req, res) => {
   try {
     const { heartRate, light, gyro, timestamp, userId } = req.body;
+    
+    console.log(`[Sensor-In] Recibiendo datos del usuario: ${userId || 'Invitado'}`);
+    console.log(`[Sensor-In] HR: ${heartRate}, Light: ${light}, Gyro: ${gyro}`);
 
     // 1. LLAMADA AL MICROSERVICIO DE PYTHON
     let interpretacion = null;
+    const pythonURL = 'https://apidatos-ivwy.onrender.com/analizar'; // Asegúrate de incluir el endpoint /analizar
+
     try {
-      const pythonResponse = await axios.post('https://apidatos-ivwy.onrender.com', {
+      console.log(`[Python-Out] Solicitando análisis a: ${pythonURL}`);
+      
+      const pythonResponse = await axios.post(pythonURL, {
         heartRate,
         light,
         gyro
-      });
+      }, { timeout: 45000 }); // Espera 45 seg (ideal para el "despertar" de Render)
+
       interpretacion = pythonResponse.data;
+      console.log("[Python-Success] Análisis recibido correctamente:", interpretacion);
+
     } catch (errorPython) {
-      console.error("Python no responde, guardando solo datos crudos.");
+      console.error("--- ERROR EN COMUNICACIÓN CON PYTHON ---");
+      if (errorPython.response) {
+        // El servidor respondió con un error (4xx, 5xx)
+        console.error(`Status: ${errorPython.response.status}`);
+        console.error(`Data:`, errorPython.response.data);
+      } else if (errorPython.request) {
+        // No hubo respuesta (posiblemente el servidor está apagado o tardó mucho)
+        console.error("No se recibió respuesta de Python. ¿Está el servidor activo o despertando?");
+      } else {
+        console.error("Error de configuración de Axios:", errorPython.message);
+      }
+      console.error("-----------------------------------------");
     }
 
     // 2. CREAR EL DOCUMENTO CON EL ANÁLISIS INCLUIDO
@@ -26,13 +47,15 @@ export const crearDatos = async (req, res) => {
       gyro,
       timestamp,
       userId: userId || null,
-      analisis: interpretacion // 👈 Aquí se guarda lo que calculó Python
+      analisis: interpretacion // Si falló arriba, esto será null o usará el default del modelo
     });
 
     await nuevoDato.save();
+    console.log(`[DB-Saved] Registro guardado con éxito en Mongo Atlas. ID: ${nuevoDato._id}`);
 
     res.status(201).json({ ok: true, data: nuevoDato });
   } catch (error) {
+    console.error("[Fatal-Error] Error en crearDatos:", error.message);
     res.status(500).json({ ok: false, error: error.message });
   }
 };

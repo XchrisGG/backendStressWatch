@@ -1,0 +1,27 @@
+name: CI/CD Pipeline Remedial
+
+on:
+  push:
+    branches: [ main ] # Se activa cuando subes algo a la rama main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Descargar código
+      uses: actions/checkout@v3
+
+    - name: Configurar Node.js
+      uses: actions/checkout@v3
+      with:
+        node-version: '18'
+
+    - name: Instalar dependencias
+      run: npm install
+
+    - name: Ejecutar Build
+      run: npm run build --if-present
+
+    - name: Ejecutar Pruebas (CI)
+      run: npm test

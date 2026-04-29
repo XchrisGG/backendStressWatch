@@ -2,7 +2,7 @@ name: CI/CD Pipeline Remedial
 
 on:
   push:
-    branches: [ main ] # Se activa cuando subes algo a la rama main
+    branches: [ main ]
 
 jobs:
   build-and-test:
@@ -10,12 +10,13 @@ jobs:
 
     steps:
     - name: Descargar código
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # Actualizado a v4
 
     - name: Configurar Node.js
-      uses: actions/checkout@v3
+      uses: actions/setup-node@v4 # ¡Aquí estaba el error! Usamos setup-node v4
       with:
-        node-version: '18'
+        node-version: '24' # Usamos la versión más reciente recomendada por GitHub
+        cache: 'npm'
 
     - name: Instalar dependencias
       run: npm install
